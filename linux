@@ -73,6 +73,6 @@ triển khai dự án cần đúng 2 bước buil và run dự án.
 mỗi dự án có thư mục riêng.
 mỗi dự án có user riêng.
 *** cachs 3 cách chạy du án frontent:
-+ webserver
-+ dạng service (enghinx) sudo apt install nginx -y
++ webserver (nginx) sudo apt install nginx -y
++ dạng service (theo như dạng systemctl hệ thống)
 + pm2

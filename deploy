@@ -1,0 +1,20 @@
+dạng service sýtemctl của hệ thống.
+ làm tất cả cacs bươc như nginx.
+ build file.
+ tạo file theo format hệ thống.
+ vi /lib/systemd/system/<nameFile>.service
+
+ Khai báo file:
+
+[Service]
+Type=simple
+User=user               
+Restart=on-failure          tu dong restart laij service
+WorkingDirectory=/projects/vision/   thu muc lam viec
+ExecStart=npm run start -- --port=3000
+
+
+luu file và reload system:
+systemctl daemon-reload
+khởi động dự án bằng cách:
+systemctl start <nameFile.service>
