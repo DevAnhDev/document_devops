@@ -1,0 +1,78 @@
+Linux
+Basic linux:
+	- sudo -I:	work permission root.
+	- pwd: 	view path current working.
+	- whoami: 	view user current working.
+	- history: 	view log history command.
+	- tail -n -1 <nameFile>: view content file. 
+System command:
+	- free -m: 	show information Ram…
+	- sudo reboot: 	resrstart system.
+	- netstat -tlpun: 	show all connections protocol TCP.
+	- netstat -ulpun: 	show al connections protocol UDP.
+	- ps -ef: 	view all process system.
+	- telnet 192.168.123.1 80: view connections to server with port 80 or not.
+	- trace route -t -p 80 192.168..: view connections.
+	- apt remove <nameService>: delete tool.
+	- lsof -i :8080: view port used or not.
+	 netstat -tuln | grep :8080: view all port used.
+File:
+	- ls:	view all folder
+	- ls -l: 	list all folder.
+	- ls -a: 	list all folder hiden.
+	- ls -t: 	sort folder.
+	- ls -lta: 	list and sort.
+Folder: 
+	- mkdir <nameFolder>:		create new folder.
+	- touch <nameFile>: 	create new file.
+	- mkdir -p <nameFolder>/<nameFolder>: 	create multiple folder.
+	- rm <nameFile>:		 delete file.
+	- rm -r <nameFolder>:		delete folder.
+	- rm -rf <nameFolder>:	 delete with -f.
+———
+	- cp -r  /data/ /tmp/: 	copy folder from data to tmp.
+	- mv /tmp/data.txt (.):	move folder current to tmp
+Create file and read file with VIM:
+	- vi /<path file>: 	read file 
+	- ii :		insert content in file.
+	- esc: 	exit command
+	- dd :	delete line.
+	- u: 		undo.
+	- yy: 	copy content.
+	- p: 		pate.
+	- /<content>: 	search content.
+	- :x : 	save content file.
+	- :q!: 	exit VIM.
+	
+Add user:
+	- Useradd <userName> : 	add new user.
+	- Adducer <userName> : 	add new user and create password.
+	- Deluder <username> : 	delete user.
+View User created:
+	- Vi /etc/passwd
+Group:
+	- Getent group: 	list group
+	- Groupadd <groupName>: 		add new group.
+	- Usermod -aG <groupName> <userName>: add user to groupName.
+	- Groups <userName> : 		view information group.
+	- Delgroup <groupname>:	delete group.
+	- Deluder <userName> <groupName>: delete user from group.
+	- Ls -l: 	list all file.
+Permission file:
+	- chown -R root:<userName> <fordelName>: allow user process folder.
+UGO=> user, Group, Owner.
+	- chmod u=rwx, g=rwx, o= <folder,fileName>/ : provider permission for user, group, one with permission  read, write, excuse.
+	- r=4, w=2,x=1. Total with number equal permission.
+	- chmod 750 <folder,fileName>: permission 
+
+How to deploy project.
+dự án nào thì cài đặt công cụ đó.
+chỉ cần lưu ý file cấu hình trong dự án
+triển khai dự án cần đúng 2 bước buil và run dự án.
+ chú ý:
+mỗi dự án có thư mục riêng.
+mỗi dự án có user riêng.
+*** cachs 3 cách chạy du án frontent:
++ webserver
++ dạng service (enghinx) sudo apt install nginx -y
++ pm2

@@ -1,0 +1,29 @@
+triển khai với nginx:
+/etc/nginx/ (all file_
+vi sites-availiable/default : xem cau hinh file
+Nginx -t: check đúng cú pháp hay không.
+ vi /etc/nginx/nginx.conf: xem caau hinh file.
+ 
+để site có thể chạy được với nginx thì cần phải tạo file cùng tên với project trong conf.d.
+Server {
+	Listen 8081;
+	Root /projects/devopsapp/build/;
+	Index.html;
+	   try_files $uri $uri/ /index.html;
+}
+Nginx -t: check syntax;
+Nginx -s reload; chayj laij service nay.
+
+****
+các bước để triển khai dự án prontend.
++ di chuyển file từ local lên server.
+	- scp <nameFile> username:ipServer:/<thư muc>/<userNao>
+	- giải nén file zip và di chuyển file vào thư mục /root/foder/
+	- tạo thư mục cung tên dự án
+	- tạo user cùng tên dự án
+	- cấp quyền sở hữu cho user.
+	- cấp quyền truy cập cho user.
+	- truy cập vào project và build project
+	- truy cập vào nginx cấu hnhf cho server port,... ls /etc/nginx/ => vi conf.d/nameduan.conf
+
+	
