@@ -1,0 +1,28 @@
+scp project lên server:
+    tạo thư mục mới lưu trữ source
+    giải nén và di chuyên đến folder
+    tạo add mới user
+    cấp quyền sở hữu cho user và group chown -R : /path/
+    cấp quyền truy cập cho user (chmod) -R 750 /path/
+
+    cài đặc các công cụ cần thiết cho môi trường BE
+        java: cài jdk cài maven
+        xem cấu hình file
+        cài dặt database (file mysql)
+        cài đặt mv file
+        run dự án 
+            mvn install -help
+            mvn install -DskipTests=true (bỏ qua bước test maven)
+            sau khi build xong run file .jar
+            java -jar target/file.jar
+        Kiểm tra hoạt động
+
+ta cần phải chạy ngầm và lưu log data ra bên ngoài:
+- nohup java -jar target/file.jar 2>&1 &
+
+ps -ef| grep <name cần tìm> : greps là searh xem tiếng trình
+
+tắt server đang ẩn đang chạy sử dụng:
+- kill -9 <id tiến trình>
+-  rm -rf nohup.out xoá file
+-  tail -f nohup.out xem tiến trình ẩn.

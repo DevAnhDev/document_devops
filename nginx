@@ -23,7 +23,8 @@ các bước để triển khai dự án prontend.
 	- tạo user cùng tên dự án
 	- cấp quyền sở hữu cho user.
 	- cấp quyền truy cập cho user.
+	- add use www-data vào group
 	- truy cập vào project và build project
 	- truy cập vào nginx cấu hnhf cho server port,... ls /etc/nginx/ => vi conf.d/nameduan.conf
 
-	
+

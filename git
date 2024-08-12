@@ -1,0 +1,15 @@
+git workflow:
+	git: 
+		1. Nhiều ngừoi phát triển
+		2. theo dõi thay đổi
+		3. kiểm soát truy cập 
+		4. quản lý phiên bản
+		5. sao lưu và phục hồi
+	git architechture:
+		Local: 
+			working directory: thư mục chứa các file chỉnh sửa của mình.
+			staging: file đưuocj chọn xem có nên đưa lên sergit không
+			localrepo:
+	gitlocal: 
+
+Gitlab server:

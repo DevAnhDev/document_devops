@@ -1,0 +1,26 @@
+cài dặt database 
+- apt update
+- apt install mysql-server
+- thay đổi cấu hình config
+    vi /etc/mysql/mysql.conf.d/mysqld.cnf thay đổi ip và cho phép truy cập từ máy khác.
+    sudo ufw allow 3306/tcp cho phép truyapaj qua 3306
+    sudo ufw allow from <IP_ADDRESS> to any port 3306 chỉ cho phép ip nhất định
+- đăng nhập vào database: mysql -u root
+
+- hiển thị databases: show databases;
+- tạo databases: create database validation;
+
+- tạo user: create user 'validation'@'%' identified by 'validation';
+username = validation, % = phạm vi truy cập tất cả các server, identified= định nghĩa mật khẩu là validation.
+- gán quyền cho username: grant all privileges on validation.* to 'validation'@'%'; 
+* gán tất cả tài nguyên cho validation
+- lưu lại các lệnh đã tạo ở trên:
+    flush privileges;
+** đăng nhập test thửu user:
+    mysql -h 172.16.11.128 -P 3306 -u validation -p
+
+- sủ dungj database:
+    use validation;
+    show table;
+    -import file sql: source /path/file.sql
+    
