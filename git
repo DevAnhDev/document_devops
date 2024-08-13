@@ -11,5 +11,47 @@ git workflow:
 			staging: file đưuocj chọn xem có nên đưa lên sergit không
 			localrepo:
 	gitlocal: 
-
 Gitlab server:
+	cài đặt:
+	search gitlab ee package: chọn version 14.4.4 unbuntu
+	copy scritp chạy get các package về: curl -s https://packages.gitlab.com/install/repositories/gitlab/gitlab-ee/script.deb.sh | sudo bash
+	cài gitlab ee: sudo apt-get install gitlab-ee=14.4.1-ee.0
+	xem repo có sẳn git lab ee: apt-cache madison gitlab-ee
+	cài repo theo đung version: sudo apt-get install gitlab-ee=14.4.1-ee.0
+
+	** Sửa host trên ubuntu: vi /etc/hosts 
+		cú pháp: ip domain
+	sửa url gitlab: vi /etc/gitlab/gitlab.rb
+  run config lại git lab: gitlab-ctl reconfigure
+
+	addhost on mac: vi /etc/hosts
+	save host: dscacheutil -flushcache
+
+	xem pass gitlab username root: cat /etc/gitlab/inital_root_password
+
+	sau khi login vào: tắt admin có thể tạo user và opprove. và mục ci/cd tắt auto dèault
+
+	quy tắt commit code: https://www.conventionalcommits.org/en/v1.0.0/#summary
+
+
+	=============================><===================================:
+	gồm các branch cơ bản:
+	main: chưá code production
+	develop: chứa code môi trường phát triển
+	feature: được tạo từ nhánh develop chứa các chức năng.
+	nhánh release (staging tester): chứa môi trường thử nghiệm.
+	nhánh hotfix:  đươcj tạo ra từ nhánh main.
+
+	gitwork fllow: 
+	 nhánh main được owner project tạo ra thì nhánh devvelop đươcj tạo ra từ main và là nhánh dùng để cho môi trường dev phát triển xuyên xuất
+	 trong qúa trình phát triển phần mềm. 
+	 và các nhánh fueature đưuocj tạo từ develop các nhánh này là các nhánh dành cho các dev phtas triển chức năng và merge fequest đến
+	 branch devlop và triển khai lên môi trường dev. sau khi megre thì mere sang nhánh release (staging) cho test test. 
+	 nếu: 
+	 		ok: mere lên main public cho người dùng
+			not ok: meger lại dev
+	trong trường hợp main có lỗi sẽ tạo ra branh hotfix, nhanhs dev merger code về từ main và fix rồi merge lại main.
+	
+
+
+

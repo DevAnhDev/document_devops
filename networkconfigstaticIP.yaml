@@ -1,0 +1,16 @@
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    ens160:
+      dhcp4: no
+      addresses:
+        - 172.16.11.130/24
+      routes:
+        - to: default
+          via: 172.16.11.2
+          metric: 100
+      nameservers:
+        addresses:
+          - 8.8.8.8
+          - 8.8.4.4
