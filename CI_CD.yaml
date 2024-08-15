@@ -1,0 +1,25 @@
+3 môi trường chính: 
+    development: 
+    staging: 
+    production: 
+CI và CD chia làm 2:
+  CI => Continuous Integration:
+    clone code => build dự án => tích hợp các công cụ test dự án, clean code, security,... nhằm dảm bảo chất lượng source code.
+  CD:
+    Continuous deployment: (1)
+        Triển khai hoàn toàn tự động (dev chỉ cần commit chức năng mới tụ động triển khai)
+    Continuous delivery: (2)
+        triển khai hoàn toàn thủ công.
+  ưu điểm và nhưọc điểm:
+  (1): tự động một cách hoàn toàn, tối ưu hiệu suất hơn.
+  (2): thủ công nhăm tăng khả năng kiểm soát hơn.
+  2 công cụ triển khai phổ biến nhất hiện nay:
+      Gitlab CI/CD: 
+      Jenkins: 
+
+dogs gitlab syntax: https://docs.gitlab.com/ee/ci/yaml/
+các bước triển khai:
+  1 cài đặt cộng cụ: gitlab runner
+  2 viết file cấu hình công việc: .gitlab-ci.yml
+      file yml có định dạng key và value.
+

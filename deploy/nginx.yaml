@@ -1,0 +1,53 @@
+Cài đặt Nginx và Certbot (nếu chưa cài):
+sudo apt update
+  sudo apt install nginx certbot python3-certbot-nginx
+Lấy chứng chỉ SSL từ Let's Encrypt:
+  sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+Cấu hình Nginx:
+  sudo nano /etc/nginx/sites-available/default
+=============================><=============================:
+# Redirect HTTP to HTTPS
+server {
+    listen 80;
+    server_name yourdomain.com www.yourdomain.com;
+    # Redirect tất cả các yêu cầu từ HTTP sang HTTPS
+    return 301 https://$host$request_uri;
+}
+# HTTPS server block
+server {
+    listen 443 ssl;
+    server_name yourdomain.com www.yourdomain.com;
+
+    ssl_certificate /etc/letsencrypt/live/yourdomain.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/yourdomain.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    # Cấu hình cho frontend
+    root /projects/devopsapp/build/;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Reverse proxy cho backend Java
+    location /api/ {
+        proxy_pass http://localhost:8080/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+=============================><=============================:
+check syntax:
+sudo nginx -t
+sudo systemctl restart nginx
+Frontend: Truy cập tại https://yourdomain.com.
+Backend: Các yêu cầu API sẽ được chuyển tiếp đến backend Java thông qua https://yourdomain.com/api/.
+Redirect HTTP sang HTTPS: Tất cả yêu cầu HTTP sẽ được chuyển hướng sang HTTPS để đảm bảo kết nối an toàn.
+Frontend cấu hình: Frontend được phục vụ từ thư mục /projects/devopsapp/build/ với index.html là file mặc định.
+Reverse Proxy cho Backend: Các yêu cầu tới /api/ sẽ được chuyển tiếp tới backend Java chạy trên cổng 8080.
+Với cấu hình này, cả frontend và backend của bạn sẽ được bảo mật và có thể truy cập qua HTTPS.
+

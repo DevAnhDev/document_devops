@@ -1,0 +1,18 @@
+triển khai thủ công cài môi trường phát triển:
+   di chuyển các source code lên server.
+   mỗi sourrce code một user quản lý quyênd truy cập và user thường đặt phải cugf tên với tên dự án.
+   cấp quyền truy cập user đó read = 4, write = 2, x= 1. 751 cho dự án đó.
+   cài đặt môi trường phát triển cho dự án đó.
+   triển khai cấu hình với nginx.
+   sigin chứng chỉ https cho domain.
+   check cấu hình nginx -t
+   reload nginx.
+
+triển khai source với docker:
+
+
+
+
+
+
+ 

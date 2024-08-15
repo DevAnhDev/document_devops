@@ -21,8 +21,8 @@ Gitlab server:
 
 	** Sửa host trên ubuntu: vi /etc/hosts 
 		cú pháp: ip domain
-	sửa url gitlab: vi /etc/gitlab/gitlab.rb
-  run config lại git lab: gitlab-ctl reconfigure
+		sửa url gitlab: vi /etc/gitlab/gitlab.rb
+  	run config lại git lab: gitlab-ctl reconfigure
 
 	addhost on mac: vi /etc/hosts
 	save host: dscacheutil -flushcache
@@ -51,7 +51,7 @@ Gitlab server:
 	 		ok: mere lên main public cho người dùng
 			not ok: meger lại dev
 	trong trường hợp main có lỗi sẽ tạo ra branh hotfix, nhanhs dev merger code về từ main và fix rồi merge lại main.
-	
+
 
 
 

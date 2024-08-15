@@ -1,0 +1,106 @@
+Tạo chứng chỉ SSL:
+Wildcard SSL: Bảo vệ tất cả các subdomain của một domain duy nhất.
+SAN SSL: Bảo vệ nhiều domain khác nhau trong một chứng chỉ.
+Chứng chỉ riêng cho mỗi domain: Phù hợp nếu bạn có nhiều domain riêng biệt và muốn bảo vệ chúng độc lập.
+
+Chứng chỉ SSL Wildcard
+Mô tả: Chứng chỉ SSL Wildcard có thể bảo vệ tất cả các subdomains của một domain duy nhất. Ví dụ, chứng chỉ *.example.com sẽ bảo vệ www.example.com, shop.example.com, blog.example.com, v.v.
+Hạn chế: Chỉ áp dụng cho các subdomains của một domain chính. Không áp dụng cho các domain khác nhau như example.com và anotherdomain.com.
+2. Chứng chỉ SSL SAN (Subject Alternative Name)
+Mô tả: Chứng chỉ SAN (còn gọi là chứng chỉ SSL multi-domain) có thể bảo vệ nhiều domain khác nhau. Bạn có thể bảo vệ example.com, www.example.com, shop.example.com, và anotherdomain.com bằng một chứng chỉ SAN.
+Hạn chế: Chứng chỉ SAN thường có giới hạn số lượng domain mà nó có thể bảo vệ (thường là 100 domain).
+3. Chứng chỉ SSL riêng biệt cho mỗi domain
+Mô tả: Mỗi domain sẽ có một chứng chỉ SSL riêng biệt. Đây là cách phổ biến và an toàn nhất nếu bạn cần bảo vệ nhiều domain khác nhau mà không muốn phụ thuộc vào giới hạn của chứng chỉ SAN hoặc Wildcard.
+
+Cấu hình Nginx: Bạn sẽ cần cấu hình mỗi domain trong một server block riêng, với đường dẫn đến chứng chỉ và khóa riêng tương ứng.
+  cài certbot:
+    sudo apt-get update
+    sudo apt-get install certbot python3-certbot-nginx  
+
+  1.Yêu cầu chứng chỉ SSL từ Let's Encrypt: Let's Encrypt cấp chứng chỉ SSL có hiệu lực trong 90 ngày
+    sudo certbot --nginx -d yourdomain.com -d www.yourdomain.com
+  Let's Encrypt cấp chứng chỉ SSL có hiệu lực trong 90 ngày, vì vậy bạn cần cấu hình tự động gia hạn. Certbot tự động cấu hình cron job cho việc này:
+  Bạn có thể kiểm tra thử việc gia hạn chứng chỉ với lệnh:
+    (sudo certbot renew --dry-run gia hạn )
+
+  2.Tạo khóa riêng tư và chứng chỉ tự ký:
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt
+ Kiểm tra và khởi động lại Nginx:
+Sau khi Certbot tạo chứng chỉ và cập nhật cấu hình Nginx, bạn cần kiểm tra lại và khởi động lại Nginx để áp dụng các thay đổi:
+sudo nginx -t
+sudo systemctl reload nginx
+
+
+Cấu hình cho yourdomain.com (Backend trên cổng 8080 và Frontend):
+Cấu hình cho fresher2.com (Backend trên cổng 8081 và Frontend):
+File cấu hình Nginx (/etc/nginx/nginx.conf hoặc /etc/nginx/sites-available/default)
+=======================><===============================:
+# Cấu hình cho yourdomain.com
+server {
+    listen 443 ssl;
+    server_name yourdomain.com;
+
+    ssl_certificate /path/to/your/certificate.crt;
+    ssl_certificate_key /path/to/your/private.key;
+
+    # Cấu hình cho frontend
+      location / {
+          root /projects/devopsapp1/build/;
+          try_files $uri /index.html;
+      }
+
+    # Cấu hình cho backend
+    location /api/ {
+        proxy_pass http://localhost:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+# Cấu hình cho fresher2.com
+server {
+    listen 443 ssl;
+    server_name fresher2.com;
+
+    ssl_certificate /path/to/your/certificate.crt;
+    ssl_certificate_key /path/to/your/private.key;
+
+    # Cấu hình cho frontend
+    location / {
+        root /projects/devopsapp2/build/;
+        try_files $uri /index.html;
+    }
+
+    # Cấu hình cho backend
+    location /api/ {
+        proxy_pass http://localhost:8081;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+
+# Cấu hình cho HTTP đến HTTPS redirect
+server {
+    listen 80;
+    server_name yourdomain.com fresher2.com;
+    return 301 https://$host$request_uri;
+}
+=======================><===============================:
+sudo nginx -t
+sudo systemctl reload nginx
+
+Giải thích:
+Cấu hình HTTPS cho các domain:
+server_name yourdomain.com và server_name fresher2.com chỉ định domain tương ứng cho từng server block.
+ssl_certificate và ssl_certificate_key cần được thay thế bằng đường dẫn đến chứng chỉ SSL của bạn.
+Cấu hình cho Frontend:
+root /projects/devopsapp1/build/ và root /projects/devopsapp2/build/ chỉ định thư mục chứa các tệp của frontend.
+try_files $uri /index.html đảm bảo rằng các yêu cầu không tìm thấy tệp cụ thể sẽ được chuyển đến index.html (cần cho ứng dụng SPA).
+Cấu hình cho Backend:
+location /api/ chuyển tiếp các yêu cầu đến backend tương ứng. Bạn có thể thay đổi /api/ thành đường dẫn phù hợp nếu cần.
+Chuyển hướng HTTP đến HTTPS:
+Server block cuối cùng chuyển hướng tất cả các yêu cầu HTTP đến HTTPS để đảm bảo bảo mật.
