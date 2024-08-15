@@ -1,0 +1,145 @@
+Gitlab runner:
+$ apt-get update
+$ curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh" | bash
+$ apt-get install gitlab-runner
+$ apt-cache madison gitlab-runner
+$ gitlab-runner -version
+
+nó củng có một user rieng như nginx: gitlab-runner
+kiểm tra version: gitlab-runner -v
+Kết nối gitlab-runner với dự án: 
+  setting->runner->expan và tiếng hành register.
+  bên server mở: gitlab-runner register
+      tiến hành nhập url:   gitlabserver. (nhập domain bị 404 nên nhập ip server)
+      nhập token: 
+      description: cùng tên với name sever hiện tại.
+      excuter: shell.
+
+  xem lại thông tin đã nhập : vi /etc/gitlab-runner/config.toml
+    sửa concurent: 4 (nghĩa là 4 có thê chạy 4 luồn khác nhau)
+    run gitlab runner: 
+  
+    nohup gitlab-runner run --working-directory /home/gitlab-runner/ --config /etc/gitlab-runner/config.toml
+    --service gitlab-runner --user gitlab-runner 2>&1 &
+
+chạy ngầm gitlabrunner thiét lập thư mục làm việc là /hom/gitlabrunner. với config trên và service gitlab với user
+
+setting bor chonj dong cuoi: 
+  taoj file caaus hinhf ci: .gitlab-ci.yml
+=====================><==============================:
+khi ta cấu hình pipline thì trên server tự động xoá code củ đi và lấy code mới nhất từ gitlab.
+khi ta cấu hình pipline thì thực hiện theo các bươcs như mô tả trong scrip.
+stages:
+    - build
+    - deploy
+    - checklog
+build:
+    stage: build
+    script: 
+        - whoami  //thực hiện xem user
+        - pwd //...
+        - ls//...
+    tags:
+        - labserver 
+
+đầu tiên tạo thư mục trên server cùng tên với tên dự án.
+Và chúng ta cần một project phải được run lên nằm trong thư mục cùng tên với dự án, 
+và có user cùng tên với dự án đồng thời cấp quyền truy cập RWX. nên ta cần phải cấp quyền sudo cho nó.
+dùng lệnh: visudo <nhằm bảo mật hệ thống mỗi dự án có một user riêng.>
+dưới dòng root: ALL:ALL user:group nhưng ALL ngĩa là tất cả
+    gitlab-runner ALL=(ALL) NOPASSWD: /bin/cp*  
+    gitlab-runner ALL=(ALL) NOPASSWD: /bin/chown*
+    gitlab-runner ALL=(ALL) NOPASSWD: /bin/su nameproject*     tươgn đương với user hiện tại
+
+in ra pid cụ thể: 
+  ps -ef | grep validatedocsapi-0.0.1-SNAPSHOT.jar |grep -v grep | awk '{print $2}'
+
+
+caaus hinhf hoanf chinh: ================>:
+variables:
+    projectname: validatedocsapi
+    version: 0.0.1-SNAPSHOT
+    user: validatedocsapi
+    projectpath: /datas/$user
+
+stages:
+    - build
+    - deploy
+    - checklog
+build:
+    stage: build
+    variables:
+        GIT_STRATEGY: clone
+    script: 
+        - mvn install -DskipTests=true 
+    tags:
+        - labserver 
+
+    only: 
+        - tags
+deploy:
+    stage: deploy
+    variables:
+        GIT_STRATEGY: none
+    script:
+        # copy qua thu mục đã tạo cho dự án
+        - sudo cp target/$projectname-$version.jar $projectpath
+        # cấp quyền sở hữu cho nó
+        - sudo chown -R $user:$user $projectpath
+        # kiểm tra và nếu đã run trưuocs đó tiến hành kill pid
+        # - sudo su validatedocsapi -c "kill -9 $(ps -ef | grep validatedocsapi-0.0.1-SNAPSHOT.jar |grep -v grep | awk '{print $2}')"
+        # -c chạy nhiều câu lệnh ngăn cách nhau dấu ;
+        - sudo su $user -c "cd $projectpath;nohup java -jar target/$projectname-$version.jar 2>&1 &"
+    tags:
+        - labserver 
+    only: 
+        - tag
+checklog:
+    stage: checklog
+    variables:
+        GIT_STRATEGY: none
+    script:
+        - sudo su $user -c "cd $projectpath;tail -n 1000 nohup.out"
+    tags:
+        - labserver 
+    only: 
+        - tag
+        
+=====================================================:
+stages:
+    - build
+    - deploy
+    - checklog
+build:
+    stage: build
+    variables:
+        GIT_STRATEGY: clone
+    script: 
+        - mvn install -DskipTests=true 
+    tags:
+        - labserver 
+deploy:
+    stage: deploy
+    variables:
+        GIT_STRATEGY: none
+    script:
+        # copy qua thu mục đã tạo cho dự án
+        - sudo cp target/validatedocsapi-0.0.1-SNAPSHOT.jar /datas/validatedocsapi
+        # cấp quyền sở hữu cho nó
+        - sudo chown -R validatedocsapi:validatedocsapi /datas/validatedocsapi
+        # kiểm tra và nếu đã run trưuocs đó tiến hành kill pid
+        # - sudo su validatedocsapi -c "kill -9 $(ps -ef | grep validatedocsapi-0.0.1-SNAPSHOT.jar |grep -v grep | awk '{print $2}')"
+        # -c chạy nhiều câu lệnh ngăn cách nhau dấu ;
+        - sudo su validatedocsapi -c "cd /datas/validatedocsapi/;nohup java -jar target/validatedocsapi-0.0.1-SNAPSHOT.jar > nohup.out 2>&1 &"
+    tags:
+        - labserver 
+    
+
+
+
+
+
+
+**** kiểm tra log khi register gitlab runnner: sudo gitlab-ctl tail
+
+

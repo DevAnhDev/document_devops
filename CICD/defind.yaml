@@ -15,6 +15,7 @@ CI và CD chia làm 2:
   (2): thủ công nhăm tăng khả năng kiểm soát hơn.
   2 công cụ triển khai phổ biến nhất hiện nay:
       Gitlab CI/CD: 
+      Gitlab runner:
       Jenkins: 
 
 dogs gitlab syntax: https://docs.gitlab.com/ee/ci/yaml/
