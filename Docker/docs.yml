@@ -1,0 +1,50 @@
+cách cài đặt docker:
+  tạo thư mục chứa các tool dự án: mkdir /tool => cd /tool và tạo mkdir dockder tạo file.sh để lưu scrip cài đặt vi /docker/docker-install.sh
+
+  cấp quyênd thực thi cho file: chmod +x install-docker.sh
+  các cánh chạy:
+    1. ./install-docker.sh
+    2. sh install-docker.sh
+    3. bash install-docker.sh
+  
+  cách sử dụng docker các lệnh cơ bản:
+   check version: docker --version
+   help: docker --help
+
+   1. Image:
+      Pull docker: Docker pull image:version
+      Liệt kê image: docker image 
+      Xoá image docker: docker rmi image:version
+      build docker image từ dockerfile: docker build -t username/image:version .
+    2. Container:
+      run container: docker run -d -p 8080:80 --name <name containner> (-it truy cập vào môi trường của nó) image:version
+      liệt kê các container: docker ps
+      liêtk kê tất cả : docker ps -a
+      dừng container đang chạy: docker stop id_container
+      xoá container: docker rm id_container
+      xoá tất cả container đã dừng: docker rm prune
+    3. volume:
+      liệt kê các volume: docker volume ls
+      tạo volume: docker volume create <nâme volume>
+      gắn volume vào container: docker run -v volumn_name:container_path image_name
+    4. network: 
+       liệt kê: docker network ls
+       tạo network: docker network create <name>
+       connect container network: docker network connect <name network> <container name> 
+       xoá network: docker network rm name_network
+    5. kiểm tra trạng thái:
+      xem log contianer: docker log in_container
+      kiểm tra chi tiết: docker inspect id_container
+      xem tài nguyên đang sử dụg: docker stats.
+    6. Docker compose:
+      các container được định nghĩa trong file docker-compose.yml
+      lệnh run docker compose: docker-compose up
+      chạy nền: docker-compose up -d
+      dừng các container bởi docker: docker compose down
+      xây dựn lại các image: docke-compose build
+
+
+
+
+
+
