@@ -11,18 +11,22 @@ cách cài đặt docker:
    check version: docker --version
    help: docker --help
 
+   0: truy cập vào container đang chạy:
    1. Image:
       Pull docker: Docker pull image:version
       Liệt kê image: docker image 
       Xoá image docker: docker rmi image:version
       build docker image từ dockerfile: docker build -t username/image:version .
     2. Container:
+      khởi động laik doker container: docker start id_container/namecontainer
+      truy cập container đang chạy: docker exec -it <name contaner> bash
       run container: docker run -d -p 8080:80 --name <name containner> (-it truy cập vào môi trường của nó) image:version
       liệt kê các container: docker ps
       liêtk kê tất cả : docker ps -a
       dừng container đang chạy: docker stop id_container
       xoá container: docker rm id_container
       xoá tất cả container đã dừng: docker rm prune
+      
     3. volume:
       liệt kê các volume: docker volume ls
       tạo volume: docker volume create <nâme volume>

@@ -139,7 +139,20 @@ deploy:
 
 
 
-
+check port: sudo lsof -i :8081
 **** kiểm tra log khi register gitlab runnner: sudo gitlab-ctl tail
 
 
+
+
+deploy: 
+    stage: deploy
+    variables: 
+        GIT_STRATEGY: none
+    script:
+        #- if [ -f /datapro/manageapigame/app.jar ]; then sudo rm /datapro/manageapigame/app.jar; fi
+        - sudo cp target/*.jar /datapro/manageapigame/app.jar
+        - sudo chown -R manageapigame:manageapigame /datapro/manageapigame/app.jar
+        - PID=$(ps -ef | grep app.jar | grep -v grep | awk '{print $2}')
+        - if [ ! -z "$PID" ]; then sudo su manageapigame -c "kill -9 $PID" fi
+        - sudo su manageapigame -c "cd /datapro/manageapigame;nohup java -jar app.jar 2>&1 &

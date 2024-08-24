@@ -1,0 +1,15 @@
+FROM:  <khai báo image cộng cụ  cần sủe dụng>
+WORKDIR: thư mục làm việc trong container
+COPY: ..  tại thư mạc hiện tại copy tất cả
+
+RUN: <pwd, ls ,....>
+ENV: Khai báo các biến 
+EXPOSE: <port server>:<portcontainer>
+CMD: và ENTRYPOINT thường dùng để chạy chạy ứng dụng lên
+CMD: thường dùng xác định lệnh và giá trị mặt định 
+ENTRYPOINT: dùng chạy lệnh cố định và 
+
+tối ưu: 
+chạy ứng dụng trên user khác: non root user.
+base image: dùng đúng version dang sử dụng,...
+dùng mutipe stage: giúp giamr lkicsh thước docker image được build ra

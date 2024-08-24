@@ -26,3 +26,4 @@ tắt server đang ẩn đang chạy sử dụng:
 - kill -9 <id tiến trình>
 -  rm -rf nohup.out xoá file
 -  tail -f nohup.out xem tiến trình ẩn.
+- sudo netstat -tulnp | grep 8080 kiểm tra port 

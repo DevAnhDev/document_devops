@@ -1,0 +1,45 @@
+variables:
+    user: manageapigame
+    projectName: manageapi.jar
+    path: /datapro/$user
+stages:
+    - build
+    - deploy
+    - checklog
+
+build:
+    stage: build
+    variables:
+        GIT_STRATERY: clone
+    script: 
+        - mvn install -DskipTests=true
+    tags:
+        - labserver_BE1
+    only:
+        - tags
+
+deploy: 
+    stage: deploy
+    variables: 
+        GIT_STRATEGY: none
+    script:
+        - if [ -f $path/$projectName ]; then sudo rm $path/$projectName; fi
+        - sudo cp target/*.jar $path/$projectName
+        - sudo chown -R $user:$user $path/$projectName
+
+        - sudo su $user -c "cd $path; nohup java -jar $projectName 2>&1 &"
+    tags:
+        - labserver_BE1
+    only:
+        - tags
+checklog: 
+    stage: checklog
+    variables: 
+        GIT_STRATEGY: none
+    script:
+        - sleep 20
+        - sudo su $user -c "cd /home/$user; tail -n 1000 nohup.out"
+    tags:
+        - labserver_BE1
+    only:
+        - tags

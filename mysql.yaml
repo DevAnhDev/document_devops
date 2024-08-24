@@ -9,7 +9,6 @@ cài dặt database
 
 - hiển thị databases: show databases;
 - tạo databases: create database validation;
-
 - tạo user: create user 'validation'@'%' identified by 'validation';
 username = validation, % = phạm vi truy cập tất cả các server, identified= định nghĩa mật khẩu là validation.
 - gán quyền cho username: grant all privileges on validation.* to 'validation'@'%'; 
@@ -17,8 +16,7 @@ username = validation, % = phạm vi truy cập tất cả các server, identifi
 - lưu lại các lệnh đã tạo ở trên:
     flush privileges;
 ** đăng nhập test thửu user:
-    mysql -h 172.16.11.128 -P 3306 -u validation -p
-
+    mysql -h 172.16.11.133 -P 3306 -u validation -p
 - sủ dungj database:
     use validation;
     show table;
